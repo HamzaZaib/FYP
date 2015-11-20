@@ -32,7 +32,7 @@ public class DrawView extends View {
     public void onDraw(Canvas canvas) {
         //int steps=currentSteps-previousSteps;
         //int val=steps*20,val1=steps*10;
-        int val=20,val1=10;
+        int val=20,val1=14;
         //previousSteps=currentSteps;
         size=lines.size()-1;
         Line last=lines.get(size);
