@@ -9,39 +9,72 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 public class DrawView extends View {
     Paint paint = new Paint();
-    enum Side {North,South,East,West};
+    public enum Side {North,South,East,West,SouthEast,SouthWest,NorthEast,NorthWest}
     Side current=Side.North,previous=Side.North;
-    int x=450;int y=800;
+    int size;
+    //previousSteps=0,currentSteps=0;
+    ArrayList<Line> lines;
+
     public DrawView(Context context) {
         super(context);
+        lines = new ArrayList<Line>();
+        size=0;
+        lines.add(new Line(450,800));
         paint.setColor(Color.WHITE);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
+        //int steps=currentSteps-previousSteps;
+        //int val=steps*20,val1=steps*10;
+        int val=20,val1=10;
+        //previousSteps=currentSteps;
+        size=lines.size()-1;
+        Line last=lines.get(size);
         if(previous!=current){
-            x=450;y=800;
             previous=current;
+            lines.add(new Line(last.x1,last.y1));
+            size++;
+            last=lines.get(size);
         }
         switch(current) {
             case North:
-                y=y+20;
-                canvas.drawLine(x, y, 450, 800, paint);
+                last.y1=last.y1-val;
              break;
             case South:
-                y=y-20;
-                canvas.drawLine(x, y, 450, 800, paint);
+                last.y1=last.y1+val;
                 break;
             case East:
-                x=x+20;
-                canvas.drawLine(x, y, 450, 800, paint);
+                last.x1=last.x1+val;
                 break;
             case West:
-                x=x-20;
-                canvas.drawLine(x, y, 450, 800, paint);
+                last.x1=last.x1-val;
                 break;
+            case SouthEast:
+                last.x1=last.x1+val1;
+                last.y1=last.y1+val1;
+                break;
+            case SouthWest:
+                last.x1=last.x1-val1;
+                last.y1=last.y1+val1;
+                break;
+            case NorthEast:
+                last.x1=last.x1+val1;
+                last.y1=last.y1-val1;
+                break;
+            case NorthWest:
+                last.x1=last.x1-val1;
+                last.y1=last.y1-val1;
+                break;
+        }
+
+        for(Line temp : lines){
+            canvas.drawLine(temp.x,temp.y,temp.x1,temp.y1,paint);
         }
     }
 
